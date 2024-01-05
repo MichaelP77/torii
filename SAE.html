@@ -1,0 +1,135 @@
+<!DOCTYPE HTML> 
+<html>
+ <head>
+   <title> Carte du monde</title>
+   <META content="text/html; charset=UTF-8;" http-equiv="Content-Type">
+	<link rel="stylesheet" href="css/sae.css">
+ </head>
+ <body>
+   	<DIV id="carte">
+		<div id="leftText"></div>
+		<div id="area">
+			<button onclick="showTorii()"><img id="epingle" src="epingle.png"/></button>
+		</div>
+		<div id="rightText"></div>
+	</DIV> 
+
+
+
+	 <script src="three.min.js"></script>
+   <script src="OrbitControls.js"></script>
+   			<script src="ColladaLoader.js"></script>
+     <script>
+		function showTorii() {
+// variables nécessairement globales aux 2 fonctions suivantes
+var renderer, scene, camera, cube, instantCourant ;
+		var mat, mat1, mat2, fg,clickInfo=[]; ;
+		
+		// Fonction init() pour créer la scene,
+		// 		animate() pour l'animer (elle s'appelle récursivement)
+
+		init() ; 
+		animate() ; 
+		  
+		function init() {
+			fg = document.getElementById("area") ;
+			carte = document.getElementById("carte")
+			leftTextArea = document.getElementById('leftText');
+			rightTextArea = document.getElementById('rightText');
+
+			fg.innerHTML = "";
+			carte.style.backgroundImage = "url('japon.png')";
+			carte.style.height = "110%";
+			carte.style.top = "-10%";
+			leftTextArea.innerHTML = 'Originaire du Japon, le Torii est un portail traditionnel lié aux religions du shintoïsme et du bouddhisme. Ce portail est communément érigé à l’entrée d’un sanctuaire shintoïste afin de séparer le monde sacré du monde profane. Le Torii est un symbole dans la culture japonaise de par son rôle, ses significations, ainsi que son histoire.'
+			rightTextArea.innerHTML = 'Originally from Japan, the Torii is a traditional gate linked to Shintoism and Buddhism. This portal is commonly built at the entrance of shintoist sanctuaries to separate the sacred world from the non-believer world. The role, the origins and the different meanings of the Torii make it a symbol of Japanese culture.'
+			console.log("fen:" + fg.offsetWidth + " "+ fg.offsetHeight ) ; 
+			
+			// Création et placement de la caméra.
+			camera = new THREE.PerspectiveCamera(75, fg.offsetWidth/fg.offsetHeight, 0.1, 10000);
+			camera.position.z = 1000;
+					
+			// Instanciation du moteur de rendu WebGL.
+			renderer = new THREE.WebGLRenderer();
+					// couleur du fond 
+			renderer.setClearColor(0x000000,0);
+					// Le moteur est de la même taille que la fenetre.
+			renderer.setSize(fg.offsetWidth, fg.offsetHeight);
+			// on associe la fenetre de rendu à la fenetre
+					fg.appendChild(renderer.domElement);
+					
+					// Contrôles de la caméra orbit control
+			controls = new THREE.OrbitControls(camera,renderer.domElement);
+					
+			// Création de la scene qui contiendra les objets.
+			scene = new THREE.Scene();
+					
+			var texture = new THREE.ImageUtils.loadTexture();
+			texture.wrapS = texture.wrapT = THREE.RepeatWrapping; 
+			   texture.repeat.set( 5, 5 );	
+	  
+			 mat1 = new THREE.MeshPhongMaterial( 
+				{
+					map:texture,
+					specular:'#ff0000',
+					shininess:100 
+				} ) ;	
+				
+					geom = new THREE.SphereGeometry(400,30,30) ; 
+				sph  = new THREE.Mesh(geom,mat1);  
+
+				
+				var lumiere1 = new THREE.DirectionalLight(0xffffff);
+lumiere1.position.set(100, 100, 100);
+scene.add(lumiere1);
+
+// Création de la deuxième lumière
+var lumiere2 = new THREE.DirectionalLight(0xffffff);
+lumiere2.position.set(-70, -50, -100); // positionné à l'arrière de l'objet
+scene.add(lumiere2);
+				
+					fg.addEventListener('click',function(evt) {
+						clickInfo.userHasClicked = true;
+						clickInfo.x = evt.clientX-fg.offsetLeft;
+						clickInfo.y = evt.clientY-fg.offsetTop;
+						console.log(clickInfo.x + " " + clickInfo.y) ;  
+					}, false);
+					
+					fg.addEventListener('mousedown',function(evt) {
+						if (mat==mat1) {
+							mat=mat2;
+						} else {
+							mat=mat1;
+						}
+						sph.material = mat ;
+					}, false);
+			
+		}
+			
+    // Fonction animate
+    function animate() {
+  var loader = new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	loader.load('toriifinal.dae', function ( collada ) {
+ 	var dae = collada.scene;
+ 	dae.scale.set(5, 5, 5); // agrandir le modèle de 2 fois sa taille d'origine
+ 	dae.position.set(0, -300, 0); // éventuellement le déplacer
+ 	dae.updateMatrix();
+ 	scene.add(dae);
+	})
+
+
+  /*
+    if (tete) tete.rotation.y += 0.05;
+    if (main) {
+    	main.rotation.y -= -0.1;
+    }
+  */
+		 sph.rotation.z += 0.03;
+     renderer.render(scene, camera);
+		 requestAnimationFrame(function(){ animate(); });
+    };            
+		}
+        </script>
+    </body>
+</html>

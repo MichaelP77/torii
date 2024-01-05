@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+#carte{
+    background-image: url('carte.png');
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#leftText{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(255, 255, 255); 
+    text-align: center; 
+    width:30%;
+    margin-top: 19%;
+    margin-left: 62%;
+    text-shadow: 1px 1px 2px black;
+    font-size: 18px;
+
+}
+
+#area{
+    width:50%; 
+    height:70%;
+    position: absolute;
+    top: 50%;
+    left: 23%;
+    transform: translate(-50%, -50%);
+}
+
+button{
+    background-color: transparent; 
+    border-color: transparent; 
+    position: relative;
+    top: 35%; 
+    left: 163%;
+}
+
+#epingle{
+    height: 35px;
+    width: 30px;
+}
+
+#rightText{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    position: absolute;
+    color: rgb(255, 255, 255); 
+    text-align: center; 
+    width:30%;
+    margin-top: 7%;
+    margin-left: 62%;
+    text-shadow: 1px 1px 2px black;
+    font-size: 18px;
+}
